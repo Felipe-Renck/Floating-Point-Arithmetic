@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1477918757 source:c:\users\frenck\documents\pontoflutuante\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
