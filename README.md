@@ -1,2 +1,2 @@
 # Floating-Point-Arithmetic
-Developed in C
+Developed in C.
