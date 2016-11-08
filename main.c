@@ -53,17 +53,17 @@ void binary(int valor, int tamanho)
 
 int *convertToBinaryArray(int numero, int bit){
   //Pode ser um valor fixo, não precisa desse malloc
-  int *bits = malloc(sizeof(int) * bit);
+  int *array = malloc(sizeof(int) * bit);
 
   int k;
   for(k=0; k<bit; k++){
     int mask =  1 << k;
     int masked_n = numero & mask;
     int thebit = masked_n >> k;
-    bits[k] = thebit;
+    array[k] = thebit;
   }
 
-  return bits;
+  return array;
 }
 
 void shiftRight(int valor, int posicoes)
@@ -132,17 +132,12 @@ int main()
     //print binario
     binary(resultado.expoente_resultante,8);
 
-    //Pega o bit requerido no caso o bit zero
-     unsigned int temp =
-
-     printf("\n%d ",temp);
-
-        //Check menor expoente entre os dois mantissa
+        //Check menor expoente entre os dois mantissa e retorna a mantissa de menor expoente
         if(union_1.field.expoente_1 != union_2.field.expoente_2)
         {
             unsigned int mantissa = comparaExpoente(union_1, union_2);
             //Desloca para a direita o menor operando com o expoente resultante
-            shiftRight(mantissa,resultado.expoente_resultante);
+            shiftRight(union_2.field.mantissa_2,12);
         }
 
 
