@@ -7,4 +7,6 @@ http://web.cs.ucla.edu/digital_arithmetic/files/ch8.pdf.
 
 http://www.applied-mathematics.net/miniSSEL1BLAS/float-ieee754.pdf.
 
+http://upcommons.upc.edu/bitstream/handle/2099.1/15467/32BitFloatingPointAdder.pdf.
+
 Developed in C.
