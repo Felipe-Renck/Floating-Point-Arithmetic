@@ -4,8 +4,7 @@
 
 
 /*
- To recap, here's the representation of a single precision
- IEEE floating point number:
+IEEE floating point number:
 
  sign         31           sign bit (0 == positive, 1 == negative)
  exponent     30-23        exponent (biased by 127)
@@ -50,6 +49,21 @@ void binary(int valor, int tamanho)
       else
          printf("0");
     }
+}
+
+int *convertToBinaryArray(int numero, int bit){
+  //Pode ser um valor fixo, não precisa desse malloc
+  int *bits = malloc(sizeof(int) * bit);
+
+  int k;
+  for(k=0; k<bit; k++){
+    int mask =  1 << k;
+    int masked_n = numero & mask;
+    int thebit = masked_n >> k;
+    bits[k] = thebit;
+  }
+
+  return bits;
 }
 
 void shiftRight(int valor, int posicoes)
@@ -130,6 +144,19 @@ int main()
             //Desloca para a direita o menor operando com o expoente resultante
             shiftRight(mantissa,resultado.expoente_resultante);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Contador de tempo
     timeEnd = clock();
