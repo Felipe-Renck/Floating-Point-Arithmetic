@@ -5,7 +5,6 @@
 
 /*
 IEEE floating point number:
-
  sign         31           sign bit (0 == positive, 1 == negative)
  exponent     30-23        exponent (biased by 127)
  mantissa     22-0         mantissa (bits to right of binary point)
@@ -32,13 +31,24 @@ typedef union
        } field;
 } union_2;
 
+typedef union
+{
+      float valor_resultante;
+      struct
+      {
+        unsigned int mantissa_25 : 25; //23 bits
+        unsigned int expoente_2 : 8;  //8 bits
+        unsigned int sinal_2 : 1;     //1 bit
+       } field;
+} struct_resultante;
+
 struct {
    unsigned int resultado : 32;
    unsigned int expoente_resultante : 8;
    unsigned int mantissa_resultante : 23;
 } resultado;
 
-void binary(int valor, int tamanho)
+unsigned int binary(int valor, int tamanho)
 {
     int k;
     for (tamanho--; tamanho >= 0; tamanho--)
@@ -49,6 +59,8 @@ void binary(int valor, int tamanho)
       else
          printf("0");
     }
+
+    return
 }
 
 int *convertToBinaryArray(int numero, int bit){
@@ -66,9 +78,10 @@ int *convertToBinaryArray(int numero, int bit){
   return array;
 }
 
-void shiftRight(int valor, int posicoes)
+int shiftRight(int valor, int posicoes)
 {
     printf("\nNumero deslocado  : %d",valor >> posicoes);
+    return valor >> posicoes;
 }
 
 int comparaExpoente(union_1 conjunto1 , union_2 conjunto2)
@@ -137,11 +150,10 @@ int main()
         {
             unsigned int mantissa = comparaExpoente(union_1, union_2);
             //Desloca para a direita o menor operando com o expoente resultante
-            shiftRight(union_2.field.mantissa_2,12);
+            unsigned int mantissaShiftada = shiftRight(mantissa,resultado.expoente_resultante);
+            printf("\n");
+            struct_resultante.field.mantissa_25 = binary(mantissaShiftada,25);
         }
-
-
-
 
 
 
