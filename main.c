@@ -31,24 +31,13 @@ typedef union
        } field;
 } union_2;
 
-typedef union
-{
-      float valor_resultante;
-      struct
-      {
-        unsigned int mantissa_25 : 25; //23 bits
-        unsigned int expoente_2 : 8;  //8 bits
-        unsigned int sinal_2 : 1;     //1 bit
-       } field;
-} struct_resultante;
-
 struct {
    unsigned int resultado : 32;
    unsigned int expoente_resultante : 8;
    unsigned int mantissa_resultante : 23;
 } resultado;
 
-unsigned int binary(int valor, int tamanho)
+void binary(int valor, int tamanho)
 {
     int k;
     for (tamanho--; tamanho >= 0; tamanho--)
@@ -59,8 +48,6 @@ unsigned int binary(int valor, int tamanho)
       else
          printf("0");
     }
-
-    return
 }
 
 int *convertToBinaryArray(int numero, int bit){
@@ -144,25 +131,28 @@ int main()
 
     //print binario
     binary(resultado.expoente_resultante,8);
+    unsigned int mantissaShiftada;
 
         //Check menor expoente entre os dois mantissa e retorna a mantissa de menor expoente
         if(union_1.field.expoente_1 != union_2.field.expoente_2)
         {
             unsigned int mantissa = comparaExpoente(union_1, union_2);
             //Desloca para a direita o menor operando com o expoente resultante
-            unsigned int mantissaShiftada = shiftRight(mantissa,resultado.expoente_resultante);
+            mantissaShiftada = shiftRight(mantissa,resultado.expoente_resultante);
             printf("\n");
-            struct_resultante.field.mantissa_25 = binary(mantissaShiftada,25);
+            //struct_resultante.field.mantissa_25 = binary(mantissaShiftada,25);
         }
 
 
+    int posicoes = 25;
+    int *bits = convertToBinaryArray(mantissaShiftada, posicoes);
 
-
-
-
-
-
-
+    int i;
+    for(i=posicoes-1; i>=0;i--)
+    {
+       printf("%d ", bits[i]);
+    }
+    printf("\n");
 
 
     // Contador de tempo
@@ -177,5 +167,6 @@ int main()
 
     printf("\nfun() took %f seconds to execute \n", time_taken);
 
+    system("PAUSE");
     return 0;
 }
