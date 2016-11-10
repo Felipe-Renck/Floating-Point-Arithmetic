@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include<time.h>
 
-
+#define POSICOES 25
 /*
 IEEE floating point number:
  sign         31           sign bit (0 == positive, 1 == negative)
@@ -36,6 +36,10 @@ struct {
    unsigned int expoente_resultante : 8;
    unsigned int mantissa_resultante : 23;
 } resultado;
+
+struct{
+    unsigned int mantissa_25 : 25;
+}structMantissa;
 
 void binary(int valor, int tamanho)
 {
@@ -85,6 +89,7 @@ int comparaExpoente(union_1 conjunto1 , union_2 conjunto2)
 
 int main()
 {
+
     // Contador de tempo
     //Variaveis de tempo
     double total_time;
@@ -139,18 +144,17 @@ int main()
             unsigned int mantissa = comparaExpoente(union_1, union_2);
             //Desloca para a direita o menor operando com o expoente resultante
             mantissaShiftada = shiftRight(mantissa,resultado.expoente_resultante);
+            structMantissa.mantissa_25 = mantissaShiftada;
             printf("\n");
             //struct_resultante.field.mantissa_25 = binary(mantissaShiftada,25);
         }
 
-
-    int posicoes = 25;
-    int *bits = convertToBinaryArray(mantissaShiftada, posicoes);
+    int *bits = convertToBinaryArray(structMantissa.mantissa_25, POSICOES);
 
     int i;
-    for(i=posicoes-1; i>=0;i--)
+    for(i=POSICOES-1; i>=0;i--)
     {
-       printf("%d ", bits[i]);
+       printf("%d", bits[i]);
     }
     printf("\n");
 
