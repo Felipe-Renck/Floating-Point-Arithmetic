@@ -38,7 +38,8 @@ struct {
 } resultado;
 
 struct{
-    unsigned int mantissa_25 : 25;
+    unsigned int mantissa_x_25 : 25;
+    unsigned int mantissa_y_25 : 25;
 }structMantissa;
 
 void binary(int valor, int tamanho)
@@ -69,22 +70,61 @@ int *convertToBinaryArray(int numero, int bit){
   return array;
 }
 
-int shiftRight(int valor, int posicoes)
+union{
+    unsigned int mantissa_x_23 : 23;
+    struct
+    {
+        unsigned int mantissa_x_22 : 22;
+        unsigned int mantissa_x_1 : 1;
+    } valorX;
+}unionTmpX;
+
+union{
+    unsigned int mantissa_y_23 : 23;
+    struct
+    {
+        unsigned int mantissa_y_22 : 22;
+        unsigned int mantissa_y_1 : 1;
+    } valorY;
+}unionTmpY;
+
+unsigned int hiddenBitX(int valor, int posicoes)
+{
+    unionTmpX.mantissa_x_23 = valor;
+    unionTmpX.mantissa_x_23 = unionTmpX.mantissa_x_23 >> 1;
+    unionTmpX.valorX.mantissa_x_1 = 1;
+    unionTmpX.mantissa_x_23 = unionTmpX.mantissa_x_23 >> (posicoes-1);
+
+    return unionTmpX.mantissa_x_23;
+}
+unsigned int hiddenBitY(int valor)
+{
+    unionTmpY.mantissa_y_23 = valor;
+    unionTmpY.mantissa_y_23 = unionTmpY.mantissa_y_23 >> 1;
+    unionTmpY.valorY.mantissa_y_1 = 1;
+    //unionTmpY.mantissa_y_23 = unionTmp.mantissa_y_23 >> (posicoes-1);
+
+    return unionTmpY.mantissa_y_23;
+}
+
+unsigned int shifRight(int valor, int posicoes)
 {
     printf("\nNumero deslocado  : %d",valor >> posicoes);
     return valor >> posicoes;
 }
 
+
+
 int comparaExpoente(union_1 conjunto1 , union_2 conjunto2)
 {
     if(conjunto1.field.expoente_1<conjunto2.field.expoente_2)
     {
+        structMantissa.mantissa_y_25 = conjunto2.field.mantissa_2;
         return conjunto1.field.mantissa_1  ;
     }
-    else
-    {
-        return conjunto2.field.mantissa_2;
-    }
+
+    structMantissa.mantissa_y_25 = conjunto1.field.mantissa_1;
+    return conjunto2.field.mantissa_2;
 }
 
 int main()
@@ -101,7 +141,7 @@ int main()
 
     //Primeiro Valor
     union_1 union_1;
-    union_1.valor_1 = 2345.125;
+    union_1.valor_1 = 9.75;
     printf("%d ",union_1.field.sinal_1);
     binary(union_1.field.expoente_1, 8);
     printf(" ");
@@ -110,7 +150,7 @@ int main()
 
     //Segundo Valor
     union_2 union_2;
-    union_2.valor_2 =  0.75;
+    union_2.valor_2 =  0.5625;
     printf("%d ",union_2.field.sinal_2);
     binary(union_2.field.expoente_2, 8);
     printf(" ");
@@ -136,40 +176,50 @@ int main()
 
     //print binario
     binary(resultado.expoente_resultante,8);
-    unsigned int mantissaShiftada;
+    unsigned int mantissaDeslocadaX;
 
-        //Check menor expoente entre os dois mantissa e retorna a mantissa de menor expoente
+        //Check menor"%d" expoente entre os dois mantissa e retorna a mantissa de menor expoente
         if(union_1.field.expoente_1 != union_2.field.expoente_2)
         {
+            //Compara os expoentes e seta as mantissas corretas;
             unsigned int mantissa = comparaExpoente(union_1, union_2);
             //Desloca para a direita o menor operando com o expoente resultante
-            mantissaShiftada = shiftRight(mantissa,resultado.expoente_resultante);
-            structMantissa.mantissa_25 = mantissaShiftada;
+            mantissaDeslocadaX = hiddenBitX(mantissa,resultado.expoente_resultante);
             printf("\n");
-            //struct_resultante.field.mantissa_25 = binary(mantissaShiftada,25);
+            //printf("%d ",mantissaDeslocadaX);
+            structMantissa.mantissa_x_25 = mantissaDeslocadaX;
+            printf("\n");
         }
 
-    int *bits = convertToBinaryArray(structMantissa.mantissa_25, POSICOES);
+            structMantissa.mantissa_y_25 = hiddenBitY(structMantissa.mantissa_y_25);
 
-    int i;
-    for(i=POSICOES-1; i>=0;i--)
-    {
-       printf("%d", bits[i]);
-    }
-    printf("\n");
+            printf("%d ",structMantissa.mantissa_y_25);
+            printf("\n");
+            binary(structMantissa.mantissa_x_25,)
+            printf("%d ",structMantissa.mantissa_x_25);
+//
+//            printf("\n");
+//            printf("%d ",structMantissa.mantissa_y_25);
+//            printf("\n");
+//            binary(structMantissa.mantissa_y_25,24);
+//            printf("\n");
+//            //binary(hiddenBitY(structMantissa.mantissa_y_25),24);
+//
+//            printf("\n");
+//            binary(structMantissa.mantissa_x_25,24);
 
 
     // Contador de tempo
-    timeEnd = clock();
-
-    total_time = ((double) (timeEnd - timeStart)) / CLK_TCK;//calulate total time
-
-    printf("\nTempo total: %f", total_time);
-
-    time = clock() - time;
-    double time_taken = ((double)time)/CLOCKS_PER_SEC; // in seconds
-
-    printf("\nfun() took %f seconds to execute \n", time_taken);
+//    timeEnd = clock();
+//
+//    total_time = ((double) (timeEnd - timeStart)) / CLK_TCK;//calulate total time
+//
+//    printf("\nTempo total: %f", total_time);
+//
+//    time = clock() - time;
+//    double time_taken = ((double)time)/CLOCKS_PER_SEC; // in seconds
+//
+//    printf("\nfun() took %f seconds to execute \n", time_taken);
 
     system("PAUSE");
     return 0;
